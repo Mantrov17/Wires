@@ -1,14 +1,12 @@
 import React from "react";
-import "./styles.css";
-import { Click } from "./Click";
+import "./styles.scss";
 
 const App: React.FC = () => {
+  const i = 1;
   return (
     <div>
       <h1>Wires</h1>
-      {process.env.NODE_ENV}
-      {process.env.name}
-      <Click />
+      <div>asda</div>
     </div>
   );
 };

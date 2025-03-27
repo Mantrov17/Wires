@@ -18,9 +18,25 @@ module.exports = {
         ],
       },
       {
-        test: /\.css$/,
-        use: ["style-loader", "css-loader"],
+        test: /\.(sa|sc|c)ss$/i,
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              esModule: false,
+              modules: {
+                auto: true,
+                localIdentName: "[name]__[local]--[hash:base64:5]",
+              },
+              importLoaders: 2,
+            },
+          },
+          "postcss-loader",
+          "sass-loader",
+        ],
       },
+
       {
         test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
         type: "asset/resource",
