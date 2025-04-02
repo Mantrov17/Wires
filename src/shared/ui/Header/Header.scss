@@ -1,0 +1,18 @@
+@use '../../assets/styles/variables' as *;
+
+.appHeader {
+  background: $primary-color;
+  color: white;
+  padding: $spacing-lg 0;
+  margin-bottom: $spacing-lg;
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: $spacing-sm;
+  }
+
+  p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+  }
+}

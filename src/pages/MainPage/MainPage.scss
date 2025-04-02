@@ -1,0 +1,26 @@
+@use '../../shared/assets/styles/variables' as *;
+
+.mainPage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 2rem;
+
+  .calculationSection {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .visualizationSection {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .mainPage {
+    grid-template-columns: 1fr;
+  }
+}

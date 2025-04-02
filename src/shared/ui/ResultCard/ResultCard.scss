@@ -1,0 +1,36 @@
+@use '../../assets/styles/variables' as *;
+@use '../../assets/styles/mixins' as *;
+
+.resultCard {
+  background: white;
+  padding: $spacing-md;
+  border-radius: 8px;
+  @include box-shadow;
+
+  h3 {
+    margin-bottom: $spacing-md;
+    color: $dark-color;
+  }
+
+  .resultItem {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: $spacing-sm;
+    padding: $spacing-sm 0;
+    border-bottom: 1px solid #eee;
+
+    span:first-child {
+      color: $secondary-color;
+    }
+  }
+
+  .recommendation {
+    margin-top: $spacing-md;
+    padding-top: $spacing-md;
+    border-top: 2px solid $primary-color;
+
+    h4 {
+      margin-bottom: $spacing-sm;
+    }
+  }
+}
