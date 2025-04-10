@@ -1,27 +1,25 @@
+import { apiClient } from "./apiClient";
 import {
+  CalculationFormValues,
   CalculationResult,
-  CalculationInput,
-} from "../../entities/calculation/types/calculation";
-import { Wire } from "../../entities/calculation/types/wire";
-import { Region } from "../../entities/calculation/types/region";
+} from "../../features/calculation/types/calculation";
+import { City } from "../../entities/city/types/city";
 
-export const getCalculationHistory = async (
-  input: CalculationInput,
-): Promise<CalculationResult> => {
-  // Заглушка для реального API вызова
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        ...input,
-        voltage: Math.random() * 150 + 50,
-        sag: Math.random() * 10 + 2,
-        recommendation: "Провод соответствует нормам",
-        timestamp: new Date().toISOString(),
-      });
-    }, 1000);
-  });
-};
+export const calculationApi = {
+  fetchCities: async () => {
+    const response = await apiClient.get<City[]>("/cities/");
+    return response.data;
+  },
 
-export const saveCalculation = (result: CalculationResult): void => {
-  localStorage.setItem("lastCalculation", JSON.stringify(result));
+  calculate: async (values: CalculationFormValues) => {
+    const payload = {
+      ...values,
+      city: Number(values.city),
+    };
+    const response = await apiClient.post<CalculationResult>(
+      "/lep-calculate/",
+      payload,
+    );
+    return response.data;
+  },
 };

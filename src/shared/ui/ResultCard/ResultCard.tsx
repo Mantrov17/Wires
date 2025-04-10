@@ -1,6 +1,6 @@
 import React from "react";
-import { CalculationResult } from "../../../entities/calculation/types/calculation";
 import styles from "./ResultCard.scss";
+import { CalculationResult } from "../../../features/calculation/types/calculation";
 
 interface ResultCardProps {
   result: CalculationResult;
@@ -11,16 +11,20 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result }) => {
     <div className={styles.resultCard}>
       <h3>Результаты расчета</h3>
       <div className={styles.resultItem}>
-        <span>Напряжение:</span>
-        <span>{result.voltage.toFixed(2)} кг/мм²</span>
+        <span>Комбинация:</span>
+        <span>{result?.combination || "—"}</span>
       </div>
       <div className={styles.resultItem}>
-        <span>Стрела провеса:</span>
-        <span>{result.sag.toFixed(2)} м</span>
+        <span>Описание:</span>
+        <span>{result?.descr || "—"}</span>
       </div>
-      <div className={styles.recommendation}>
-        <h4>Рекомендации:</h4>
-        <p>{result.recommendation}</p>
+      <div className={styles.resultItem}>
+        <span>Максимальный провис:</span>
+        <span>
+          {result?.max_sag !== undefined
+            ? result.max_sag.toFixed(2) + " м"
+            : "—"}
+        </span>
       </div>
     </div>
   );

@@ -18,44 +18,30 @@ module.exports = {
                 ],
             },
             {
-                test: /\.scss$/,
-                use: [
-                    'style-loader',
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: {
-                                auto: (resourcePath) => !resourcePath.includes('shared/assets/styles'),
-                                localIdentName: '[name]__[local]--[hash:base64:5]',
-                                exportLocalsConvention: 'camelCaseOnly',
-                                mode: 'local',
-                            },
-                            esModule: true,
-                            importLoaders: 2,
-                        },
-                    },
-                    'postcss-loader',
-                    'sass-loader',
-                ],
-            },
-
-            {
                 test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
                 type: "asset/resource",
+                generator: {
+                    filename: "../images/[hash][ext][query]"
+                }
             },
             {
-                test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
-                type: "asset/inline",
+                test: /\.(woff(2)?|eot|ttf|otf|svg)$/,
+                type: "asset/resource",
+                generator: {
+                    filename: "../fonts/[hash][ext][query]"
+                }
             },
         ],
     },
     output: {
-        path: path.resolve(__dirname, "..", "./build"),
+        path: path.resolve(__dirname, "..", "static/lep/js"),
         filename: "bundle.js",
+        publicPath: '/'
     },
     plugins: [
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, "..", "./src/index.html"),
+            filename: path.resolve(__dirname, "..", "templates/lep/index.html"),
         }),
     ],
     stats: "errors-only",

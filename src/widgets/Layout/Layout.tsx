@@ -8,11 +8,9 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className={styles.appLayout}>
+    <div className={styles.layout}>
       <Header />
-      <main className={styles.mainContent}>
-        <div className={styles.container}>{children}</div>
-      </main>
+      <main className={styles.mainContent}>{children}</main>
     </div>
   );
 };

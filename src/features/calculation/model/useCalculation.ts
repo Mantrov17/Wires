@@ -1,33 +1,37 @@
-import { useState } from "react";
-import {
-  CalculationResult,
-  CalculationInput,
-} from "../../../entities/calculation/types/calculation";
-import {
-  getCalculationHistory,
-  saveCalculation,
-} from "../../../shared/api/calculationApi";
-import { useLocalStorage } from "../../../shared/lib/LocalStorage";
+// FILE: src/features/calculation/model/useCalculation.ts
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { calculationApi } from "../../../shared/api/calculationApi";
+import { CalculationFormValues, CalculationResult } from "../types/calculation";
 
 export const useCalculation = () => {
-  const [results, setResults] = useState<CalculationResult | null>(null);
-  const [history, setHistory] = useLocalStorage<CalculationResult[]>(
-    "calculations",
-    [],
-  );
-  const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
 
-  const calculate = async (data: CalculationInput) => {
-    setIsLoading(true);
-    try {
-      const result = await getCalculationHistory(data);
-      setResults(result);
-      saveCalculation(result);
-      setHistory([result, ...history]);
-    } finally {
-      setIsLoading(false);
-    }
+  const mutation = useMutation({
+    mutationFn: calculationApi.calculate,
+    onSuccess: (data) => {
+      const resultWithTimestamp = {
+        ...data,
+        timestamp: new Date().toISOString(),
+      };
+
+      if (typeof data.max_sag === "number") {
+        queryClient.setQueryData<CalculationResult[]>(
+          ["calculations"],
+          (old) =>
+            old ? [resultWithTimestamp, ...old] : [resultWithTimestamp],
+        );
+      } else {
+        console.warn("Некорректный результат расчёта:", data);
+      }
+    },
+  });
+
+  return {
+    calculate: mutation.mutate,
+    results: mutation.data,
+    history:
+      queryClient.getQueryData<CalculationResult[]>(["calculations"]) || [],
+    isLoading: mutation.isLoading,
+    error: mutation.error,
   };
-
-  return { calculate, results, history, isLoading };
 };

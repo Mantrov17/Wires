@@ -1,3 +1,4 @@
+// src/pages/MainPage/MainPage.tsx
 import React from "react";
 import {
   CalculatorForm,

@@ -1,6 +1,6 @@
 import React from "react";
-import { CalculationResult } from "../../../../entities/calculation/types/calculation";
 import styles from "./HistoryList.scss";
+import { CalculationResult } from "../../types/calculation";
 
 interface HistoryListProps {
   items: CalculationResult[];
@@ -14,18 +14,24 @@ export const HistoryList: React.FC<HistoryListProps> = ({
   return (
     <div className={styles.historyList}>
       <h3>История расчетов</h3>
-      {items.map((item) => (
+      {items.map((item, index) => (
         <div
-          key={item.timestamp}
+          key={item.timestamp || index}
           className={styles.historyItem}
           onClick={() => onSelect(item)}
         >
           <div className={styles.historyDate}>
-            {new Date(item.timestamp).toLocaleString()}
+            {item.timestamp
+              ? new Date(item.timestamp).toLocaleString()
+              : "Время неизвестно"}
           </div>
           <div className={styles.historyInfo}>
-            <span>{item.wireId}</span>
-            <span>{item.spanLength}m</span>
+            <span>{item.combination || "—"}</span>
+            <span>
+              {item?.max_sag !== undefined
+                ? `${item.max_sag.toFixed(2)} м`
+                : "—"}
+            </span>
           </div>
         </div>
       ))}

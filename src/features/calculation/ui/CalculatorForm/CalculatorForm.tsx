@@ -1,63 +1,128 @@
-import React, { useState } from "react";
-import { wires } from "../../../../entities/calculation/types/wire";
-import { CalculationInput } from "../../../../entities/calculation/types/calculation";
-import styles from "./CalculatorForm.scss";
+import React from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { useCities } from "../../model/useCities";
+import { CalculationFormValues } from "../../types/calculation";
 
 interface CalculatorFormProps {
-  onSubmit: (data: CalculationInput) => void;
+  onSubmit: (values: CalculationFormValues) => void;
   isLoading: boolean;
 }
+
+const validationSchema = Yup.object().shape({
+  city: Yup.string().required("Обязательное поле"),
+  span_length: Yup.number()
+    .min(1, "Минимум 1 метр")
+    .required("Обязательное поле"),
+  F0: Yup.number().positive().required("Обязательное поле"),
+  d: Yup.number().positive().required("Обязательное поле"),
+  p: Yup.number().positive().required("Обязательное поле"),
+  a0: Yup.number().positive().required("Обязательное поле"),
+  E0: Yup.number().positive().required("Обязательное поле"),
+  o_r: Yup.number().positive().required("Обязательное поле"),
+  o_h: Yup.number().positive().required("Обязательное поле"),
+  o_c: Yup.number().positive().required("Обязательное поле"),
+});
 
 export const CalculatorForm: React.FC<CalculatorFormProps> = ({
   onSubmit,
   isLoading,
 }) => {
-  const [formData, setFormData] = useState<CalculationInput>({
-    spanLength: "",
-    wireId: "",
-    regionId: "",
-  });
+  const { data: cities, isLoading: citiesLoading, error } = useCities();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
+  if (citiesLoading) return <div>Загрузка городов...</div>;
+  if (error instanceof Error)
+    return <div>Ошибка загрузки: {error.message}</div>;
 
   return (
-    <form className={styles.calculatorForm} onSubmit={handleSubmit}>
-      <div className={styles.formGroup}>
-        <label>Длина пролета (м)</label>
-        <input
-          type="number"
-          min="50"
-          max="1000"
-          required
-          value={formData.spanLength}
-          onChange={(e) =>
-            setFormData({ ...formData, spanLength: e.target.value })
-          }
-        />
-      </div>
+    <div className="calculator-form">
+      <Formik
+        initialValues={{
+          city: "", // изменено
+          span_length: 100,
+          F0: 50,
+          d: 10,
+          p: 0.5,
+          a0: 0.000023,
+          E0: 8000,
+          o_r: 12,
+          o_h: 10,
+          o_c: 8,
+        }}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <div className="form-group">
+              <label htmlFor="city">Город</label>
+              <Field as="select" name="city" className="form-control">
+                <option value="">Выберите город</option>
+                {cities?.map((city) => (
+                  <option key={city.id} value={city.id}>
+                    {city.city}
+                  </option>
+                ))}
+              </Field>
+              <ErrorMessage
+                name="city"
+                component="div"
+                className="error-message"
+              />
+            </div>
 
-      <div className={styles.formGroup}>
-        <label>Марка провода</label>
-        <select
-          required
-          value={formData.wireId}
-          onChange={(e) => setFormData({ ...formData, wireId: e.target.value })}
-        >
-          <option value="">Выберите провод</option>
-          {wires.map((wire) => (
-            <option key={wire.id} value={wire.id}>
-              {wire.label}
-            </option>
-          ))}
-        </select>
-      </div>
+            {[
+              "span_length",
+              "F0",
+              "d",
+              "p",
+              "a0",
+              "E0",
+              "o_r",
+              "o_h",
+              "o_c",
+            ].map((field) => (
+              <div key={field} className="form-group">
+                <label htmlFor={field}>{getFieldLabel(field)}</label>
+                <Field
+                  name={field}
+                  type="number"
+                  step={field === "span_length" ? 1 : 0.01}
+                  className="form-control"
+                />
+                <ErrorMessage
+                  name={field}
+                  component="div"
+                  className="error-message"
+                />
+              </div>
+            ))}
 
-      <button type="submit" disabled={isLoading}>
-        {isLoading ? "Расчет..." : "Рассчитать"}
-      </button>
-    </form>
+            <button
+              type="submit"
+              disabled={isLoading || isSubmitting}
+              className="submit-button"
+            >
+              {isLoading ? "Расчет..." : "Рассчитать"}
+            </button>
+          </Form>
+        )}
+      </Formik>
+    </div>
   );
+};
+
+const getFieldLabel = (field: string): string => {
+  const labels: Record<string, string> = {
+    span_length: "Длина пролета (м)",
+    F0: "Сечение провода (мм²)",
+    d: "Диаметр провода (мм)",
+    p: "Вес провода (кг/м)",
+    a0: "Коэффициент расширения (1/°C)",
+    E0: "Модуль упругости (кг/мм²)",
+    o_r: "Допустимое напряжение (нагрузка)",
+    o_h: "Допустимое напряжение (температура)",
+    o_c: "Допустимое напряжение (среднее)",
+  };
+  return labels[field] || field;
 };
