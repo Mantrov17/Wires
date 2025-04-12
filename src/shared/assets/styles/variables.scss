@@ -1,22 +1,23 @@
-// Colors
-$primary-color: #007bff;
-$secondary-color: #6c757d;
-$success-color: #28a745;
-$danger-color: #dc3545;
-$light-color: #f8f9fa;
-$dark-color: #343a40;
+// File: src/shared/assets/styles/_variables.scss
+// Исправленный файл переменных
+$primary: #4a90e2;
+$primary-hover: #357abd;
+$success: #00c853;
+$error: #d32f2f;
+$text-primary: #2d3748;
+$text-secondary: #718096;
+$background: #f7fafc;
+$surface: #ffffff;
+$border: #e2e8f0;
 
-// Spacing
-$spacing-unit: 1rem;
-$spacing-sm: $spacing-unit * 0.5;
-$spacing-md: $spacing-unit * 1;
-$spacing-lg: $spacing-unit * 2;
-
-// Breakpoints
-$breakpoint-sm: 576px;
-$breakpoint-md: 768px;
-$breakpoint-lg: 992px;
-
-// Typography
-$font-family-base: 'Segoe UI', system-ui, sans-serif;
-$font-size-base: 1rem;
+:root {
+  --primary: #{$primary};
+  --primary-hover: #{$primary-hover};
+  --success: #{$success};
+  --error: #{$error};
+  --text-primary: #{$text-primary};
+  --text-secondary: #{$text-secondary};
+  --background: #{$background};
+  --surface: #{$surface};
+  --border: #{$border};
+}

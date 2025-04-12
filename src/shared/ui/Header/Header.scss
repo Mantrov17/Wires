@@ -1,18 +1,19 @@
-@use '../../assets/styles/variables' as *;
+// File: src/shared/ui/Header/Header.scss
+@use '../../assets/styles/variables';
 
 .appHeader {
-  background: $primary-color;
-  color: white;
-  padding: $spacing-lg 0;
-  margin-bottom: $spacing-lg;
+  background: variables.$surface;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 1rem 0;
+  margin-bottom: 2rem;
 
   h1 {
-    font-size: 2rem;
-    margin-bottom: $spacing-sm;
+    font-size: 1.8rem;
+    font-weight: 600;
   }
 
   p {
-    font-size: 1.1rem;
-    opacity: 0.9;
+    color: variables.$text-secondary;
+    font-size: 0.9rem;
   }
 }

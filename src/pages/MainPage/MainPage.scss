@@ -1,26 +1,25 @@
-@use '../../shared/assets/styles/variables' as *;
+// File: src/pages/MainPage/MainPage.scss
+@use '../../shared/assets/styles/variables';
 
 .mainPage {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 300px;
   gap: 2rem;
-  padding: 2rem;
+  padding: 0 1rem;
 
-  .calculationSection {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  .visualizationSection {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: $breakpoint-md) {
-  .mainPage {
-    grid-template-columns: 1fr;
-  }
+.calculationSection {
+  background: variables.$surface;
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.visualizationSection {
+  position: sticky;
+  top: 2rem;
+  height: fit-content;
 }

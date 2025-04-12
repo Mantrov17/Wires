@@ -1,3 +1,4 @@
+// FILE: src/features/calculation/types/calculation.ts
 export interface CalculationResult {
   combination: string;
   descr: string;
@@ -5,15 +6,29 @@ export interface CalculationResult {
   timestamp?: string;
 }
 
-export interface CalculationFormValues {
+export interface AutoCalculationFormValues {
   city: string;
+  wire: string;
   span_length: number;
+}
+
+export interface ManualCalculationFormValues {
+  span_length: number;
+  t_min: number;
+  t_max: number;
+  t_avg: number;
+  e: number;
+  q: number;
   F0: number;
-  d: number;
-  p: number;
+  diameter: number;
+  weight: number;
   a0: number;
   E0: number;
   o_r: number;
-  o_h: number;
   o_c: number;
 }
+
+export type CalculationError = {
+  [key in keyof (AutoCalculationFormValues &
+    ManualCalculationFormValues)]?: string;
+};
