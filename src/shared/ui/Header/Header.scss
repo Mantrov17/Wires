@@ -1,19 +1,41 @@
-// File: src/shared/ui/Header/Header.scss
-@use '../../assets/styles/variables';
+@use '../../../shared/assets/styles/variables' as *;
+@use '../../../shared/assets/styles/mixins' as *;
 
 .appHeader {
-  background: variables.$surface;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  padding: 1rem 0;
-  margin-bottom: 2rem;
+  background: $surface;
+  border-bottom: 1px solid $border;
+  padding: 1.5rem 0;
+  @include box-shadow;
+}
 
-  h1 {
-    font-size: 1.8rem;
-    font-weight: 600;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.headerContent {
+  text-align: center;
+}
+
+.mainTitle {
+  color: $primary;
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+  font-weight: 600;
+
+  @include responsive(768px) {
+    font-size: 1.75rem;
   }
+}
 
-  p {
-    color: variables.$text-secondary;
-    font-size: 0.9rem;
+.subTitle {
+  color: $text-secondary;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+
+  @include responsive(768px) {
+    font-size: 1rem;
   }
 }

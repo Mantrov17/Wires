@@ -1,40 +1,41 @@
-import React from "react";
-import styles from "./HistoryList.scss";
+// FILE: src/ui/HistoryList/HistoryList.tsx
+import { useQuery } from "@tanstack/react-query";
 import { CalculationResult } from "../../types/calculation";
+import styles from "./HistoryList.scss";
 
-interface HistoryListProps {
-  items: CalculationResult[];
-  onSelect: (item: CalculationResult) => void;
-}
+export const HistoryList = () => {
+  const { data: calculations } = useQuery<CalculationResult[]>({
+    queryKey: ["calculations"],
+    initialData: [],
+  });
 
-export const HistoryList: React.FC<HistoryListProps> = ({
-  items,
-  onSelect,
-}) => {
   return (
-    <div className={styles.historyList}>
+    <div className={styles.historyListContainer}>
       <h3>История расчетов</h3>
-      {items.map((item, index) => (
-        <div
-          key={item.timestamp || index}
-          className={styles.historyItem}
-          onClick={() => onSelect(item)}
-        >
-          <div className={styles.historyDate}>
-            {item.timestamp
-              ? new Date(item.timestamp).toLocaleString()
-              : "Время неизвестно"}
-          </div>
-          <div className={styles.historyInfo}>
-            <span>{item.combination || "—"}</span>
-            <span>
-              {item?.max_sag !== undefined
-                ? `${item.max_sag.toFixed(2)} м`
-                : "—"}
-            </span>
-          </div>
-        </div>
-      ))}
+      {calculations?.length === 0 ? (
+        <p className={styles.historyListEmpty}>Нет данных</p>
+      ) : (
+        <ul className={styles.historyListItems}>
+          {calculations?.map((calc) => (
+            <li key={calc.timestamp} className={styles.historyListItem}>
+              <div className={styles.historyListMeta}>
+                <span className={styles.historyListMetaLabel}>Результат</span>
+                <span className={styles.historyListMetaValue}>
+                  {" "}
+                  {calc.max_sag}
+                </span>
+                <span className={styles.historyListMetaLabel}>Тип</span>
+                <span className={styles.historyListMetaValue}>
+                  {calc.combination}
+                </span>
+                <p className={styles.historyListDate}>
+                  Дата: {new Date(calc.timestamp!).toLocaleString()}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

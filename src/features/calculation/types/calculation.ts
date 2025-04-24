@@ -9,11 +9,11 @@ export interface CalculationResult {
 export interface AutoCalculationFormValues {
   city: string;
   wire: string;
-  span_length: number;
+  l: number;
 }
 
 export interface ManualCalculationFormValues {
-  span_length: number;
+  l: number;
   t_min: number;
   t_max: number;
   t_avg: number;

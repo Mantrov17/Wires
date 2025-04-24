@@ -5,28 +5,29 @@ import { useCities } from "../../model/useCities";
 import { useWires } from "../../model/useWires";
 import {
   AutoCalculationFormValues,
+  CalculationResult,
   ManualCalculationFormValues,
 } from "../../types/calculation";
+import { useCalculation } from "../../model/useCalculation";
+import styles from "./CalculatorForm.scss";
 
 interface CalculatorFormProps {
-  onSubmitAuto: (values: AutoCalculationFormValues) => void;
-  onSubmitManual: (values: ManualCalculationFormValues) => void;
-  isLoading: boolean;
+  onSuccess?: (result: CalculationResult) => void;
+  isLoading?: boolean;
   errors?: Record<string, string>;
 }
 
 const autoValidationSchema = Yup.object().shape({
   city: Yup.string().required("Обязательное поле"),
   wire: Yup.string().required("Обязательное поле"),
-  span_length: Yup.number()
+  l: Yup.number()
     .min(1, "Минимум 1 метр")
+    .max(500, "Максимум 500 метров")
     .required("Обязательное поле"),
 });
 
 const manualValidationSchema = Yup.object().shape({
-  span_length: Yup.number()
-    .min(1, "Минимум 1 метр")
-    .required("Обязательное поле"),
+  l: Yup.number().min(1, "Минимум 1 метр").required("Обязательное поле"),
   t_min: Yup.number().required("Обязательное поле"),
   t_max: Yup.number().required("Обязательное поле"),
   t_avg: Yup.number().required("Обязательное поле"),
@@ -42,12 +43,13 @@ const manualValidationSchema = Yup.object().shape({
 });
 
 export const CalculatorForm: React.FC<CalculatorFormProps> = ({
-  onSubmitAuto,
-  onSubmitManual,
-  isLoading,
+  onSuccess,
   errors,
 }) => {
   const [mode, setMode] = useState<"auto" | "manual">("auto");
+  const { calculateAuto, calculateManual, isLoadingAuto, isLoadingManual } =
+    useCalculation();
+
   const {
     data: cities,
     isLoading: citiesLoading,
@@ -59,23 +61,77 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
     error: wiresError,
   } = useWires();
 
+  const handleAutoSubmit = async (
+    values: AutoCalculationFormValues,
+    {
+      resetForm,
+      setFieldError,
+    }: {
+      resetForm: () => void;
+      setFieldError: (field: string, message: string) => void;
+    },
+  ) => {
+    try {
+      const result = await calculateAuto(values);
+      onSuccess?.(result);
+      resetForm();
+    } catch (error: any) {
+      if (error.response?.data) {
+        Object.entries(error.response.data).forEach(([field, messages]) => {
+          setFieldError(field, (messages as string[]).join(", "));
+        });
+      }
+    }
+  };
+
+  const handleManualSubmit = async (
+    values: ManualCalculationFormValues,
+    {
+      resetForm,
+      setFieldError,
+    }: {
+      resetForm: () => void;
+      setFieldError: (field: string, message: string) => void;
+    },
+  ) => {
+    try {
+      const result = await calculateManual(values);
+      onSuccess?.(result);
+      resetForm();
+    } catch (error: any) {
+      if (error.response?.data) {
+        Object.entries(error.response.data).forEach(([field, messages]) => {
+          setFieldError(field, (messages as string[]).join(", "));
+        });
+      }
+    }
+  };
+
   if (citiesLoading || wiresLoading) return <div>Загрузка данных...</div>;
   if (citiesError || wiresError) return <div>Ошибка загрузки данных</div>;
 
   return (
-    <div className="calculator-form">
-      <div className="mode-switcher">
+    <div>
+      <div>
         <button
           type="button"
-          className={mode === "auto" ? "active" : ""}
           onClick={() => setMode("auto")}
+          className={
+            mode === "auto"
+              ? `${styles.modeSwitcherButton} ${styles.active}`
+              : styles.modeSwitcherButton
+          }
         >
           Автоматический
         </button>
         <button
           type="button"
-          className={mode === "manual" ? "active" : ""}
           onClick={() => setMode("manual")}
+          className={
+            mode === "manual"
+              ? `${styles.modeSwitcherButton} ${styles.active}`
+              : styles.modeSwitcherButton
+          }
         >
           Ручной
         </button>
@@ -86,16 +142,22 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
           initialValues={{
             city: "",
             wire: "",
-            span_length: 300,
+            l: 300,
           }}
           validationSchema={autoValidationSchema}
-          onSubmit={onSubmitAuto}
+          onSubmit={handleAutoSubmit}
         >
           {({ isSubmitting }) => (
             <Form>
-              <div className="form-group">
-                <label htmlFor="city">Город</label>
-                <Field as="select" name="city" className="form-control">
+              <div className={styles.formGroup}>
+                <label className={styles.formGroupLabel} htmlFor="city">
+                  Город
+                </label>
+                <Field
+                  as="select"
+                  name="city"
+                  className={styles.formGroupSelect}
+                >
                   <option value="">Выберите город</option>
                   {cities?.map((city) => (
                     <option key={city.id} value={city.id}>
@@ -106,13 +168,17 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
                 <ErrorMessage
                   name="city"
                   component="div"
-                  className="error-message"
+                  className={styles.errorMessage}
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="wire">Провод</label>
-                <Field as="select" name="wire" className="form-control">
+              <div className={styles.formGroup}>
+                <label htmlFor="wire">Марка провода</label>
+                <Field
+                  as="select"
+                  name="wire"
+                  className={styles.formGroupSelect}
+                >
                   <option value="">Выберите провод</option>
                   {wires?.map((wire) => (
                     <option key={wire.id} value={wire.id}>
@@ -123,34 +189,31 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
                 <ErrorMessage
                   name="wire"
                   component="div"
-                  className="error-message"
+                  className={styles.errorMessage}
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="span_length">Длина пролета (м)</label>
+              <div className={styles.formGroup}>
+                <label htmlFor="l">Длина пролета (м)</label>
                 <Field
-                  name="span_length"
+                  name="l"
                   type="number"
                   step="0.1"
-                  className="form-control"
+                  className={styles.formGroupNumberInput} // Изменено здесь
                 />
                 <ErrorMessage
-                  name="span_length"
+                  name="l"
                   component="div"
-                  className="error-message"
+                  className={styles.errorMessage}
                 />
-                {errors?.span_length && (
-                  <div className="error-message">{errors.span_length}</div>
-                )}
               </div>
 
               <button
                 type="submit"
-                disabled={isLoading || isSubmitting}
-                className="submit-button"
+                disabled={isLoadingAuto || isSubmitting}
+                className={styles.submitButton}
               >
-                {isLoading ? "Расчет..." : "Рассчитать"}
+                {isLoadingAuto ? "Расчет..." : "Рассчитать"}
               </button>
             </Form>
           )}
@@ -158,7 +221,7 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
       ) : (
         <Formik
           initialValues={{
-            span_length: 300.5,
+            l: 300.5,
             t_min: -40,
             t_max: 40,
             t_avg: 5,
@@ -173,12 +236,12 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
             o_c: 7.25,
           }}
           validationSchema={manualValidationSchema}
-          onSubmit={onSubmitManual}
+          onSubmit={handleManualSubmit}
         >
           {({ isSubmitting }) => (
-            <Form>
+            <Form className={styles.manualFormGrid}>
               {Object.entries({
-                span_length: "Длина пролета (м)",
+                l: "Длина пролета (м)",
                 t_min: "Минимальная температура (℃)",
                 t_max: "Максимальная температура (℃)",
                 t_avg: "Среднегодовая температура (℃)",
@@ -192,31 +255,30 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
                 o_r: "Допустимое напряжение (нагрузка, кг/мм²)",
                 o_c: "Допустимое напряжение (среднее, кг/мм²)",
               }).map(([field, label]) => (
-                <div key={field} className="form-group">
-                  <label htmlFor={field}>{label}</label>
+                <div key={field} className={styles.formGroup}>
+                  <label className={styles.formGroupLabel} htmlFor={field}>
+                    {label}
+                  </label>
                   <Field
                     name={field}
                     type="number"
-                    step={field === "span_length" ? 0.1 : 1}
-                    className="form-control"
+                    step={field === "l" ? 0.1 : 1}
+                    className={styles.formGroupNumberInput} // Изменено здесь
                   />
                   <ErrorMessage
                     name={field}
                     component="div"
-                    className="error-message"
+                    className={styles.errorMessage}
                   />
-                  {errors?.[field] && (
-                    <div className="error-message">{errors[field]}</div>
-                  )}
                 </div>
               ))}
 
               <button
                 type="submit"
-                disabled={isLoading || isSubmitting}
-                className="submit-button"
+                disabled={isLoadingManual || isSubmitting}
+                className={styles.submitButton}
               >
-                {isLoading ? "Расчет..." : "Рассчитать"}
+                {isLoadingManual ? "Расчет..." : "Рассчитать"}
               </button>
             </Form>
           )}
@@ -224,18 +286,4 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
       )}
     </div>
   );
-};
-
-const getFieldLabel = (field: string): string => {
-  const labels: Record<string, string> = {
-    span_length: "Длина пролета (м)",
-    F0: "Сечение провода (мм²)",
-    diameter: "Диаметр провода (мм)",
-    weight: "Вес провода (кг/км)",
-    a0: "Коэффициент расширения (1/град)",
-    E0: "Модуль упругости (кг/мм²)",
-    o_r: "Допустимое напряжение (нагрузка)",
-    o_c: "Допустимое напряжение (среднее)",
-  };
-  return labels[field] || field;
 };

@@ -32,14 +32,11 @@ export const useCalculation = () => {
   });
 
   return {
-    calculateAuto: autoMutation.mutate,
-    calculateManual: manualMutation.mutate,
-    results: autoMutation.data || manualMutation.data,
+    calculateAuto: autoMutation.mutateAsync,
+    calculateManual: manualMutation.mutateAsync,
     history:
       queryClient.getQueryData<CalculationResult[]>(["calculations"]) || [],
     isLoadingAuto: autoMutation.isLoading,
     isLoadingManual: manualMutation.isLoading,
-    errorAuto: autoMutation.error,
-    errorManual: manualMutation.error,
   };
 };
