@@ -25,12 +25,21 @@ module.exports = {
                 }
             },
             {
-                test: /\.(woff(2)?|eot|ttf|otf|svg)$/,
-                type: "asset/resource",
-                generator: {
-                    filename: "../fonts/[hash][ext][query]"
-                }
+                test: /\.svg$/i,
+                oneOf: [
+                    {
+                        issuer: /\.[jt]sx?$/,
+                        use: ["@svgr/webpack"],
+                    },
+                    {
+                        type: "asset/resource",
+                        generator: {
+                            filename: "../images/[hash][ext][query]",
+                        },
+                    },
+                ],
             },
+
         ],
     },
     output: {

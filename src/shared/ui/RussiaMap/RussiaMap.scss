@@ -1,0 +1,12 @@
+.russiaMapContainer {
+  padding: 1.5rem;
+  width: 100%;
+  flex: 1;
+
+  .russia-svg {
+    width: 100%;
+    height: auto;
+    max-height: 70vh;
+    cursor: default;
+  }
+}

@@ -10,6 +10,8 @@ import {
 } from "../../types/calculation";
 import { useCalculation } from "../../model/useCalculation";
 import styles from "./CalculatorForm.scss";
+import { RussiaMap } from "../../../../shared/ui/RussiaMap/RussiaMap";
+import { Modal } from "../../../../shared/ui/Modal/Modal";
 
 interface CalculatorFormProps {
   onSuccess?: (result: CalculationResult) => void;
@@ -49,6 +51,8 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
   const [mode, setMode] = useState<"auto" | "manual">("auto");
   const { calculateAuto, calculateManual, isLoadingAuto, isLoadingManual } =
     useCalculation();
+  const [cityId, setCityId] = useState<string>("");
+  const [isMapOpen, setIsMapOpen] = useState(false);
 
   const {
     data: cities,
@@ -110,6 +114,10 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
   if (citiesLoading || wiresLoading) return <div>Загрузка данных...</div>;
   if (citiesError || wiresError) return <div>Ошибка загрузки данных</div>;
 
+  const handleCitySelect = (id: string) => {
+    setCityId(id);
+  };
+
   return (
     <div>
       <div>
@@ -147,24 +155,19 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
           validationSchema={autoValidationSchema}
           onSubmit={handleAutoSubmit}
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, setFieldValue, values }) => (
             <Form>
               <div className={styles.formGroup}>
-                <label className={styles.formGroupLabel} htmlFor="city">
-                  Город
-                </label>
-                <Field
-                  as="select"
-                  name="city"
-                  className={styles.formGroupSelect}
+                <div
+                  className={styles.selectTrigger}
+                  onClick={() => setIsMapOpen(true)}
                 >
-                  <option value="">Выберите город</option>
-                  {cities?.map((city) => (
-                    <option key={city.id} value={city.id}>
-                      {city.city}
-                    </option>
-                  ))}
-                </Field>
+                  {values.city
+                    ? cities?.find((c) => String(c.id) === values.city)?.city ||
+                      "Город не найден"
+                    : "Выберите город на карте"}
+                </div>
+                <Field type="hidden" name="city" />
                 <ErrorMessage
                   name="city"
                   component="div"
@@ -215,6 +218,15 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
               >
                 {isLoadingAuto ? "Расчет..." : "Рассчитать"}
               </button>
+              <Modal isOpen={isMapOpen} onClose={() => setIsMapOpen(false)}>
+                <h3>Выберите город на карте</h3>
+                <RussiaMap
+                  onSelectCity={(cityId) => {
+                    setFieldValue("city", cityId);
+                    setIsMapOpen(false);
+                  }}
+                />
+              </Modal>
             </Form>
           )}
         </Formik>
@@ -284,6 +296,10 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
           )}
         </Formik>
       )}
+      <Modal isOpen={isMapOpen} onClose={() => setIsMapOpen(false)}>
+        <h3>Выберите регион на карте</h3>
+        <RussiaMap onSelectCity={handleCitySelect} />
+      </Modal>
     </div>
   );
 };

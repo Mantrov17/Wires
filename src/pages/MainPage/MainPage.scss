@@ -26,6 +26,8 @@
 }
 
 .visualizationSection {
+  position: relative;
+  z-index: 1;
   flex: 2;
   background: $surface;
   border-radius: 12px;
@@ -47,6 +49,7 @@
 }
 
 .historyHeader {
+  z-index: -1;
   font-size: 1.25rem;
   font-weight: 500;
   color: $text-primary;
