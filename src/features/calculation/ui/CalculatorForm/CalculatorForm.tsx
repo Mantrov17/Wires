@@ -157,23 +157,39 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
         >
           {({ isSubmitting, setFieldValue, values }) => (
             <Form>
-              <div className={styles.formGroup}>
-                <div
-                  className={styles.selectTrigger}
-                  onClick={() => setIsMapOpen(true)}
-                >
-                  {values.city
-                    ? cities?.find((c) => String(c.id) === values.city)?.city ||
-                      "Город не найден"
-                    : "Выберите город на карте"}
-                </div>
-                <Field type="hidden" name="city" />
-                <ErrorMessage
-                  name="city"
-                  component="div"
-                  className={styles.errorMessage}
-                />
+              <Field as="select" name="city" className={styles.formGroupSelect}>
+                <option value="">Выберите город</option>
+                {cities?.map((city) => (
+                  <option key={city.id} value={city.id}>
+                    {city.city}
+                  </option>
+                ))}
+              </Field>
+
+              <ErrorMessage
+                name="city"
+                component="div"
+                className={styles.errorMessage}
+              />
+
+              <div className={styles.selectedCity}>
+                {values.city ? (
+                  <>
+                    <span>Выбранный город: </span>
+                    {cities?.find((c) => String(c.id) === values.city)?.city}
+                  </>
+                ) : (
+                  "Город не выбран"
+                )}
               </div>
+
+              <button
+                type="button"
+                onClick={() => setIsMapOpen(true)}
+                className={styles.mapButton}
+              >
+                {values.city ? "Изменить город" : "Выбрать город на карте"}
+              </button>
 
               <div className={styles.formGroup}>
                 <label htmlFor="wire">Марка провода</label>

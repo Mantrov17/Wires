@@ -29,17 +29,30 @@ module.exports = {
                 oneOf: [
                     {
                         issuer: /\.[jt]sx?$/,
-                        use: ["@svgr/webpack"],
-                    },
-                    {
-                        type: "asset/resource",
-                        generator: {
-                            filename: "../images/[hash][ext][query]",
-                        },
+                        use: [
+                            {
+                                loader: "@svgr/webpack",
+                                options: {
+                                    svgoConfig: {
+                                        plugins: [
+                                            {
+                                                name: "preset-default",
+                                                params: {
+                                                    overrides: {
+                                                        mergePaths: false,
+                                                        collapseGroups: false,
+                                                        convertShapeToPath: false,
+                                                    },
+                                                },
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                        ],
                     },
                 ],
             },
-
         ],
     },
     output: {
