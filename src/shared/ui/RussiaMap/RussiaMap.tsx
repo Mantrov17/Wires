@@ -1,7 +1,7 @@
 // src/shared/components/RussiaMap.tsx
 
 import React from "react";
-import RussiaSVG from "../../assets/Russia.svg";
+import RussiaSVG from "../../assets/MapOfRussia.svg";
 import styles from "./RussiaMap.scss";
 
 type Props = {

@@ -296,10 +296,6 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
           )}
         </Formik>
       )}
-      <Modal isOpen={isMapOpen} onClose={() => setIsMapOpen(false)}>
-        <h3>Выберите регион на карте</h3>
-        <RussiaMap onSelectCity={handleCitySelect} />
-      </Modal>
     </div>
   );
 };

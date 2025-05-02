@@ -3,6 +3,8 @@
 @use "sass:color";
 
 .historyList {
+
+  z-index: -1;
   &Container {
     background: $surface;
     border-radius: 12px;
