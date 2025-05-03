@@ -1,3 +1,3 @@
 export { CalculatorForm } from "./ui/CalculatorForm/CalculatorForm";
-export { HistoryList } from "./ui/HistoryList/HistoryList";
+export { ResultList } from "./ui/ResultList/ResultList";
 export { useCalculation } from "./model/useCalculation";

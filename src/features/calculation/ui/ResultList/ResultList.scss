@@ -4,7 +4,6 @@
 
 .historyList {
 
-  z-index: -1;
   &Container {
     background: $surface;
     border-radius: 12px;
@@ -35,11 +34,9 @@
     border-radius: 8px;
     padding: 1rem;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 1rem;
 
-    &:hover {
-      transform: translateY(-2px);
-      @include box-shadow;
-    }
+
   }
 
   &Meta {
@@ -65,8 +62,11 @@
 
   &Date {
     color: $text-secondary;
-    font-size: 0.75rem;
-    margin-top: 0.5rem;
+
+    &Value {
+      color: $text-primary;
+      font-weight: 500;
+    }
   }
 
   &Empty {

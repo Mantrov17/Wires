@@ -7,7 +7,7 @@ export interface CalculationResult {
 }
 
 export interface AutoCalculationFormValues {
-  city: string;
+  subject: string;
   wire: string;
   l: number;
 }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useCities } from "../../model/useCities";
+import { useSubjects } from "../../model/useSubjects";
 import { useWires } from "../../model/useWires";
 import {
   AutoCalculationFormValues,
@@ -12,37 +12,16 @@ import { useCalculation } from "../../model/useCalculation";
 import styles from "./CalculatorForm.scss";
 import { RussiaMap } from "../../../../shared/ui/RussiaMap/RussiaMap";
 import { Modal } from "../../../../shared/ui/Modal/Modal";
+import {
+  autoValidationSchema,
+  manualValidationSchema,
+} from "../../model/validationSchema";
 
 interface CalculatorFormProps {
   onSuccess?: (result: CalculationResult) => void;
   isLoading?: boolean;
   errors?: Record<string, string>;
 }
-
-const autoValidationSchema = Yup.object().shape({
-  city: Yup.string().required("Обязательное поле"),
-  wire: Yup.string().required("Обязательное поле"),
-  l: Yup.number()
-    .min(1, "Минимум 1 метр")
-    .max(500, "Максимум 500 метров")
-    .required("Обязательное поле"),
-});
-
-const manualValidationSchema = Yup.object().shape({
-  l: Yup.number().min(1, "Минимум 1 метр").required("Обязательное поле"),
-  t_min: Yup.number().required("Обязательное поле"),
-  t_max: Yup.number().required("Обязательное поле"),
-  t_avg: Yup.number().required("Обязательное поле"),
-  e: Yup.number().min(1).max(6).required("Обязательное поле"),
-  q: Yup.number().min(1).max(6).required("Обязательное поле"),
-  F0: Yup.number().positive().required("Обязательное поле"),
-  diameter: Yup.number().positive().required("Обязательное поле"),
-  weight: Yup.number().positive().required("Обязательное поле"),
-  a0: Yup.number().positive().required("Обязательное поле"),
-  E0: Yup.number().positive().required("Обязательное поле"),
-  o_r: Yup.number().positive().required("Обязательное поле"),
-  o_c: Yup.number().positive().required("Обязательное поле"),
-});
 
 export const CalculatorForm: React.FC<CalculatorFormProps> = ({
   onSuccess,
@@ -51,14 +30,14 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
   const [mode, setMode] = useState<"auto" | "manual">("auto");
   const { calculateAuto, calculateManual, isLoadingAuto, isLoadingManual } =
     useCalculation();
-  const [cityId, setCityId] = useState<string>("");
+  const [subjectId, setSubjectId] = useState<string>("");
   const [isMapOpen, setIsMapOpen] = useState(false);
 
   const {
-    data: cities,
-    isLoading: citiesLoading,
-    error: citiesError,
-  } = useCities();
+    data: subjects,
+    isLoading: subjectsLoading,
+    error: subjectsError,
+  } = useSubjects();
   const {
     data: wires,
     isLoading: wiresLoading,
@@ -111,16 +90,13 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
     }
   };
 
-  if (citiesLoading || wiresLoading) return <div>Загрузка данных...</div>;
-  if (citiesError || wiresError) return <div>Ошибка загрузки данных</div>;
-
-  const handleCitySelect = (id: string) => {
-    setCityId(id);
-  };
+  if (subjectsLoading || wiresLoading) return <div>Загрузка данных...</div>;
+  if (subjectsError || wiresError) return <div>Ошибка загрузки данных</div>;
 
   return (
     <div>
       <div>
+        <p>Режим расчёта:</p>
         <button
           type="button"
           onClick={() => setMode("auto")}
@@ -148,7 +124,7 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
       {mode === "auto" ? (
         <Formik
           initialValues={{
-            city: "",
+            subject: "",
             wire: "",
             l: 300,
           }}
@@ -157,48 +133,41 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
         >
           {({ isSubmitting, setFieldValue, values }) => (
             <Form>
-              <Field as="select" name="city" className={styles.formGroupSelect}>
-                <option value="">Выберите город</option>
-                {cities?.map((city) => (
-                  <option key={city.id} value={city.id}>
-                    {city.city}
+              <Field
+                as="select"
+                name="subject"
+                className={styles.formGroupSelect}
+              >
+                <option value="">Выберите регион</option>
+                {subjects?.map((subject) => (
+                  <option key={subject.id} value={subject.id}>
+                    {subject.subject}
                   </option>
                 ))}
               </Field>
 
               <ErrorMessage
-                name="city"
+                name="subject"
                 component="div"
                 className={styles.errorMessage}
               />
-
-              <div className={styles.selectedCity}>
-                {values.city ? (
-                  <>
-                    <span>Выбранный город: </span>
-                    {cities?.find((c) => String(c.id) === values.city)?.city}
-                  </>
-                ) : (
-                  "Город не выбран"
-                )}
-              </div>
 
               <button
                 type="button"
                 onClick={() => setIsMapOpen(true)}
                 className={styles.mapButton}
               >
-                {values.city ? "Изменить город" : "Выбрать город на карте"}
+                Выбрать регион на карте
               </button>
 
               <div className={styles.formGroup}>
-                <label htmlFor="wire">Марка провода</label>
+                <label htmlFor="wire">Марка провода:</label>
                 <Field
                   as="select"
                   name="wire"
                   className={styles.formGroupSelect}
                 >
-                  <option value="">Выберите провод</option>
+                  <option value="">Выберите марку провода</option>
                   {wires?.map((wire) => (
                     <option key={wire.id} value={wire.id}>
                       {wire.wire}
@@ -213,8 +182,9 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="l">Длина пролета (м)</label>
+                <label htmlFor="l">Длина пролета (м):</label>
                 <Field
+                  as="input"
                   name="l"
                   type="number"
                   step="0.1"
@@ -232,13 +202,15 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
                 disabled={isLoadingAuto || isSubmitting}
                 className={styles.submitButton}
               >
-                {isLoadingAuto ? "Расчет..." : "Рассчитать"}
+                {isLoadingAuto ? "Расчёт..." : "Рассчитать"}
               </button>
               <Modal isOpen={isMapOpen} onClose={() => setIsMapOpen(false)}>
-                <h3>Выберите город на карте</h3>
+                <h3 className={styles.regionChangeTitle}>
+                  Выберите регион на карте
+                </h3>
                 <RussiaMap
-                  onSelectCity={(cityId) => {
-                    setFieldValue("city", cityId);
+                  onSelectSubject={(SubjectId) => {
+                    setFieldValue("subject", SubjectId);
                     setIsMapOpen(false);
                   }}
                 />
@@ -250,7 +222,7 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
         <Formik
           initialValues={{
             l: 300.5,
-            t_min: -40,
+            t_min: 0,
             t_max: 40,
             t_avg: 5,
             e: 1,
@@ -288,6 +260,7 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
                     {label}
                   </label>
                   <Field
+                    as="input"
                     name={field}
                     type="number"
                     step={field === "l" ? 0.1 : 1}
@@ -306,7 +279,7 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
                 disabled={isLoadingManual || isSubmitting}
                 className={styles.submitButton}
               >
-                {isLoadingManual ? "Расчет..." : "Рассчитать"}
+                {isLoadingManual ? "Расчёт..." : "Рассчитать"}
               </button>
             </Form>
           )}

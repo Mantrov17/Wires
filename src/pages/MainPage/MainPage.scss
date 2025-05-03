@@ -1,55 +1,94 @@
+// FILE: src/pages/MainPage/MainPage.scss
 @use '../../shared/assets/styles/variables' as *;
 @use '../../shared/assets/styles/mixins' as *;
 
 .mainPage {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 2rem;
   padding: 2rem;
   min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
 
   @include responsive(768px) {
-    flex-direction: column;
     padding: 1rem;
-  }
-}
-
-.calculationSection {
-  flex: 1;
-  max-width: 500px;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-
-  @include responsive(768px) {
+    gap: 1rem;
     max-width: 100%;
   }
 }
 
-.visualizationSection {
+.calculationSection {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.resultSection {
+  width: 100%;
+  max-width: 800px;
   position: relative;
-  z-index: 1;
-  flex: 2;
+  background: $surface;
+  border-radius: 12px;
+  padding: 1.5rem;
+  @include box-shadow;
+}
+
+.infoSection {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 2rem;
   background: $surface;
   border-radius: 12px;
   padding: 1.5rem;
   @include box-shadow;
 
-  @include responsive(768px) {
-    margin-top: 1rem;
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: $text-primary;
+    margin-bottom: 1rem;
+    text-align: center;
   }
 }
 
-// Дополнительные стили для улучшения визуальной иерархии
-.resultCardWrapper {
-  border: 1px solid $border;
-  border-radius: 8px;
-  padding: 1.5rem;
+.modesTable {
+  width: 100%;
+  border-collapse: collapse;
   background: $surface;
-  @include box-shadow;
+  margin: 0 auto;
+
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid $border;
+    max-width: 400px;
+  }
+
+  th {
+    font-weight: 500;
+    color: $text-primary;
+  }
+
+  td {
+    color: $text-primary;
+  }
+
+  @include responsive(768px) {
+    display: block;
+    overflow-x: auto;
+
+    th, td {
+      white-space: nowrap;
+    }
+  }
 }
 
-.historyHeader {
-  z-index: -1;
+.resultHeader {
+  text-align: center;
   font-size: 1.25rem;
   font-weight: 500;
   color: $text-primary;

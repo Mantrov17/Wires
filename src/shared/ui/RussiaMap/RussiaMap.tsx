@@ -1,13 +1,13 @@
 import React from "react";
 import RussiaSVG from "../../assets/MapOfRussia.svg";
 import styles from "./RussiaMap.scss";
-import { CITY_COORDINATES_MAP } from "../../constants/cityCoordinatesMap";
+import { SUBJECT_COORDINATES_MAP } from "../../constants/subjectCoordinatesMap";
 
 type Props = {
-  onSelectCity?: (cityId: string) => void;
+  onSelectSubject?: (subjectId: string) => void;
 };
 
-export const RussiaMap: React.FC<Props> = ({ onSelectCity }) => {
+export const RussiaMap: React.FC<Props> = ({ onSelectSubject }) => {
   const extractCoordinateCode = (d: string | null) => {
     if (!d) return null;
 
@@ -29,13 +29,13 @@ export const RussiaMap: React.FC<Props> = ({ onSelectCity }) => {
 
       if (coordCode) {
         console.log("Coordinate code:", coordCode);
-        const cityId = CITY_COORDINATES_MAP[coordCode];
+        const subjectId = SUBJECT_COORDINATES_MAP[coordCode];
 
-        if (cityId) {
-          console.log("City ID:", cityId);
-          onSelectCity?.(cityId.toString());
+        if (subjectId) {
+          console.log("Subject ID:", subjectId);
+          onSelectSubject?.(subjectId.toString());
         } else {
-          console.log("No city found for code:", coordCode);
+          console.log("No subject found for code:", coordCode);
         }
       }
     }

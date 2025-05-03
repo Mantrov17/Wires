@@ -1,5 +1,5 @@
 import { apiClient } from "./apiClient";
-import { City } from "../../entities/city/types/city";
+import { Subject } from "../../entities/subject/types/subject";
 import { Wire } from "../../entities/calculation/types/wire";
 import {
   AutoCalculationFormValues,
@@ -8,8 +8,8 @@ import {
 } from "../../features/calculation/types/calculation";
 
 export const calculationApi = {
-  fetchCities: async () => {
-    const response = await apiClient.get<City[]>("/cities/");
+  fetchSubjects: async () => {
+    const response = await apiClient.get<Subject[]>("/subjects/");
     return response.data;
   },
 
@@ -21,7 +21,7 @@ export const calculationApi = {
   calculateAuto: async (values: AutoCalculationFormValues) => {
     const payload = {
       ...values,
-      city: Number(values.city),
+      subject: Number(values.subject),
       wire: Number(values.wire),
     };
     const response = await apiClient.post<CalculationResult>(
