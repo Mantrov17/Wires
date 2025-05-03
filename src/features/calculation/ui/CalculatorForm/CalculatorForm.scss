@@ -13,18 +13,15 @@
   @include flex-center;
   gap: 1rem;
   margin-bottom: 2rem;
-&Text{
-
-}
 
   &Button {
+    font-size: 1rem;
     flex: 1;
     padding: 0.8rem 1.5rem;
     border: 2px solid $border;
     border-radius: 8px;
     background: transparent;
     cursor: pointer;
-    font-weight: 500;
     color: $text-secondary;
     transition: all 0.2s ease;
     margin-right: 1rem;
@@ -166,6 +163,6 @@
 .selectedSubject {
   margin-top: 1rem;
   padding: 8px;
-  background: #f8f8f8;
+  background: $surface;
   border-radius: 4px;
 }

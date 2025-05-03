@@ -11,11 +11,9 @@ export const RussiaMap: React.FC<Props> = ({ onSelectSubject }) => {
   const extractCoordinateCode = (d: string | null) => {
     if (!d) return null;
 
-    // Извлекаем все цифры из атрибута d
     const digits = d.replace(/\D/g, "");
     if (!digits) return null;
 
-    // Берем первые 5 цифр и дополняем нулями при необходимости
     return digits.slice(0, 5).padEnd(5, "0");
   };
 

@@ -1,5 +1,3 @@
-// src/features/wire/model/useWires.ts
-
 import { useQuery } from "@tanstack/react-query";
 import { calculationApi } from "../../../shared/api/calculationApi";
 

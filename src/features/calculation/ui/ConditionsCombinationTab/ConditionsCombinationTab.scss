@@ -1,0 +1,34 @@
+@use '../../../../shared/assets/styles/variables' as *;
+@use '../../../../shared/assets/styles/mixins' as *;
+
+.modesTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: $surface;
+  margin: 0 auto;
+
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid $border;
+    max-width: 400px;
+  }
+
+  th {
+    font-weight: 500;
+    color: $text-primary;
+  }
+
+  td {
+    color: $text-primary;
+  }
+
+  @include responsive(768px) {
+    display: block;
+    overflow-x: auto;
+
+    th, td {
+      white-space: nowrap;
+    }
+  }
+}

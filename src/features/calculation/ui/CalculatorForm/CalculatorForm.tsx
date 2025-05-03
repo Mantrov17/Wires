@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import { useSubjects } from "../../model/useSubjects";
 import { useWires } from "../../model/useWires";
 import {
@@ -69,24 +68,20 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
 
   const handleManualSubmit = async (
     values: ManualCalculationFormValues,
-    {
-      resetForm,
-      setFieldError,
-    }: {
-      resetForm: () => void;
-      setFieldError: (field: string, message: string) => void;
-    },
+    helpers: FormikHelpers<ManualCalculationFormValues>,
   ) => {
     try {
       const result = await calculateManual(values);
       onSuccess?.(result);
-      resetForm();
+      helpers.resetForm();
     } catch (error: any) {
       if (error.response?.data) {
         Object.entries(error.response.data).forEach(([field, messages]) => {
-          setFieldError(field, (messages as string[]).join(", "));
+          helpers.setFieldError(field, (messages as string[]).join(", "));
         });
       }
+    } finally {
+      helpers.setSubmitting(false);
     }
   };
 
@@ -123,6 +118,7 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
 
       {mode === "auto" ? (
         <Formik
+          key="auto"
           initialValues={{
             subject: "",
             wire: "",
@@ -182,13 +178,13 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="l">Длина пролета (м):</label>
+                <label htmlFor="l">Длина пролёта (м):</label>
                 <Field
                   as="input"
                   name="l"
                   type="number"
                   step="0.1"
-                  className={styles.formGroupNumberInput} // Изменено здесь
+                  className={styles.formGroupNumberInput}
                 />
                 <ErrorMessage
                   name="l"
@@ -220,13 +216,14 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
         </Formik>
       ) : (
         <Formik
+          key="manual"
           initialValues={{
-            l: 300.5,
-            t_min: 0,
+            l: 230,
+            t_min: -40,
             t_max: 40,
             t_avg: 5,
-            e: 1,
-            q: 1,
+            e: 2,
+            q: 3,
             F0: 137,
             diameter: 15.2,
             weight: 492,
@@ -241,12 +238,12 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
           {({ isSubmitting }) => (
             <Form className={styles.manualFormGrid}>
               {Object.entries({
-                l: "Длина пролета (м)",
+                l: "Длина пролёта (м)",
                 t_min: "Минимальная температура (℃)",
                 t_max: "Максимальная температура (℃)",
                 t_avg: "Среднегодовая температура (℃)",
-                e: "Район по гололеду (1-6)",
-                q: "Район по ветру (1-6)",
+                e: "Район по гололёду (1-6)",
+                q: "Район по ветровому давлению (1-6)",
                 F0: "Сечение провода (мм²)",
                 diameter: "Диаметр провода (мм)",
                 weight: "Вес провода (кг/км)",
@@ -264,7 +261,7 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
                     name={field}
                     type="number"
                     step={field === "l" ? 0.1 : 1}
-                    className={styles.formGroupNumberInput} // Изменено здесь
+                    className={styles.formGroupNumberInput}
                   />
                   <ErrorMessage
                     name={field}

@@ -22,15 +22,17 @@ export const ResultList = () => {
               <h3>Последний результат</h3>
               <div className={styles.historyListItem}>
                 <div className={styles.historyListMeta}>
-                  <span className={styles.historyListMetaLabel}>Результат</span>
+                  <span className={styles.historyListMetaLabel}>
+                    Стрела провеса
+                  </span>
                   <span className={styles.historyListMetaValue}>
-                    {latestResult.max_sag}
+                    {latestResult.max_sag} (м)
                   </span>
                   <span className={styles.historyListMetaLabel}>Тип</span>
                   <span className={styles.historyListMetaValue}>
                     {latestResult.combination}
                   </span>
-                  <p className={styles.historyListDate}>
+                  <p className={styles.historyListDateValue}>
                     Дата: {new Date(latestResult.timestamp!).toLocaleString()}
                   </p>
                 </div>
@@ -45,11 +47,12 @@ export const ResultList = () => {
                   <li key={calc.timestamp} className={styles.historyListItem}>
                     <div className={styles.historyListMeta}>
                       <span className={styles.historyListMetaLabel}>
-                        Результат
+                        Стрела провеса
                       </span>
                       <span className={styles.historyListMetaValue}>
-                        {calc.max_sag}
+                        {calc.max_sag} (м)
                       </span>
+
                       <span className={styles.historyListMetaLabel}>Тип</span>
                       <span className={styles.historyListMetaValue}>
                         {calc.combination}

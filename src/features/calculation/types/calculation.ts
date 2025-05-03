@@ -1,4 +1,3 @@
-// FILE: src/features/calculation/types/calculation.ts
 export interface CalculationResult {
   combination: string;
   descr: string;
@@ -27,8 +26,3 @@ export interface ManualCalculationFormValues {
   o_r: number;
   o_c: number;
 }
-
-export type CalculationError = {
-  [key in keyof (AutoCalculationFormValues &
-    ManualCalculationFormValues)]?: string;
-};

@@ -11,10 +11,10 @@ module.exports = {
         },
         hot: true,
         open: true,
-        historyApiFallback: true, // Для SPA роутинга
-        proxy: [ // Changed to an array
+        historyApiFallback: true,
+        proxy: [
             {
-                context: ['/api'], // Specify the paths to proxy here
+                context: ['/api'],
                 target: 'http://localhost:8000',
                 changeOrigin: true,
                 secure: false,

@@ -1,6 +1,5 @@
 import React from "react";
 import { Header } from "../../shared/ui/Header/Header";
-import styles from "./Layout.scss";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -8,9 +7,9 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className={styles.layout}>
+    <div>
       <Header />
-      <main className={styles.mainContent}>{children}</main>
+      <main>{children}</main>
     </div>
   );
 };

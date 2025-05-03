@@ -1,4 +1,3 @@
-// FILE: src/features/calculation/model/useCalculation.ts
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { calculationApi } from "../../../shared/api/calculationApi";
 import {
