@@ -7,7 +7,7 @@ export const ManualInputExplanation: React.FC = () => {
       <table className={styles.explanationTable}>
         <thead>
           <tr>
-            <th>Параметр</th>
+            <th>Переменная, используемая в расчётах</th>
             <th>Описание</th>
           </tr>
         </thead>
@@ -38,7 +38,7 @@ export const ManualInputExplanation: React.FC = () => {
           </tr>
           <tr>
             <td>F0</td>
-            <td>Общее сечение провода (мм2, число с плавающей точкой)</td>
+            <td>Общее сечение провода (мм^2, число с плавающей точкой)</td>
           </tr>
           <tr>
             <td>diameter</td>
@@ -50,10 +50,7 @@ export const ManualInputExplanation: React.FC = () => {
           </tr>
           <tr>
             <td>a0</td>
-            <td>
-              Коэффициент линейного расширения (м/град, число с плавающей
-              точкой)
-            </td>
+            <td>Коэффициент расширения (м/град)</td>
           </tr>
           <tr>
             <td>E0</td>
@@ -61,16 +58,12 @@ export const ManualInputExplanation: React.FC = () => {
           </tr>
           <tr>
             <td>o_r</td>
-            <td>
-              Допускаемое напряжение при наибольшей нагрузке (кг/мм2, число с
-              плавающей точкой)
-            </td>
+            <td>Допустимое напряжение при наибольших нагрузках (кг/мм^2)</td>
           </tr>
           <tr>
             <td>o_c</td>
             <td>
-              Допускаемое напряжение при среднегодовой нагрузке (кг/мм2, число с
-              плавающей точкой)
+              Допустимое напряжение при среднегодовой температуре (кг/мм^2)
             </td>
           </tr>
         </tbody>

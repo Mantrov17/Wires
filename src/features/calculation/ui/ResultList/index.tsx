@@ -32,9 +32,16 @@ export const ResultList = () => {
                   <span className={styles.historyListMetaValue}>
                     {latestResult.combination}
                   </span>
-                  <p className={styles.historyListDateValue}>
-                    Дата: {new Date(latestResult.timestamp!).toLocaleString()}
-                  </p>
+                  <span className={styles.historyListDate}>
+                    Дата:{" "}
+                    <span className={styles.historyListDateValue}>
+                      {new Date(latestResult.timestamp!).toLocaleString()}
+                    </span>
+                  </span>
+                </div>
+                <div>
+                  <span className={styles.historyListMetaLabel}>Описание</span>
+                  {latestResult.descr}
                 </div>
               </div>
             </div>
@@ -63,6 +70,12 @@ export const ResultList = () => {
                           {new Date(calc.timestamp!).toLocaleString()}
                         </span>
                       </span>
+                    </div>
+                    <div>
+                      <span className={styles.historyListMetaLabel}>
+                        Описание
+                      </span>
+                      {latestResult.descr}
                     </div>
                   </li>
                 ))}
