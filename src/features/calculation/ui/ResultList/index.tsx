@@ -1,12 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { CalculationResult } from "../../types/calculation";
 import styles from "./styles.scss";
+import { useResult } from "../../model/useResult";
 
 export const ResultList = () => {
-  const { data: calculations } = useQuery<CalculationResult[]>({
-    queryKey: ["calculations"],
-    initialData: [],
-  });
+  const { data: calculations } = useResult();
 
   const latestResult = calculations?.[0];
   const historyResults = calculations?.length > 1 ? calculations.slice(1) : [];
