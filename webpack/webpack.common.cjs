@@ -64,7 +64,8 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, "..", "src", "index.html"),
             filename: "index.html",
-            inject: "body"
+            inject: "body",
+            favicon: 'favicon/power-line.png',
         })
     ],
     stats: "errors-only",
