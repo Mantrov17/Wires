@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./ManualInputExplanation.scss";
+import styles from "./styles.scss";
 
 export const ManualInputExplanation: React.FC = () => {
   return (

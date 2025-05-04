@@ -1,4 +1,4 @@
-import styles from "./ConditionsCombinationTab.scss";
+import styles from "./styles.scss";
 import React from "react";
 export const ConditionsCombinationTab: React.FC = () => {
   return (

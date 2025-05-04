@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { CalculationResult } from "../../types/calculation";
-import styles from "./ResultList.scss";
+import styles from "./styles.scss";
 
 export const ResultList = () => {
   const { data: calculations } = useQuery<CalculationResult[]>({

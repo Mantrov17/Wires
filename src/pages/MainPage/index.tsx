@@ -6,7 +6,7 @@ import {
   ResultList,
 } from "../../features/calculation";
 import { useCalculation } from "../../features/calculation";
-import styles from "./MainPage.scss";
+import styles from "./styles.scss";
 
 export const MainPage: React.FC = () => {
   const { history, isLoadingAuto, isLoadingManual } = useCalculation();

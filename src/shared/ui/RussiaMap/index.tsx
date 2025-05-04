@@ -1,6 +1,6 @@
 import React from "react";
 import RussiaSVG from "../../assets/MapOfRussia.svg";
-import styles from "./RussiaMap.scss";
+import styles from "./styles.scss";
 import { SUBJECT_COORDINATES_MAP } from "../../constants/subjectCoordinatesMap";
 
 type Props = {

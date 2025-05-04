@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Modal.scss";
+import styles from "./styles.scss";
 
 interface ModalProps {
   isOpen: boolean;

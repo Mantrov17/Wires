@@ -8,9 +8,9 @@ import {
   ManualCalculationFormValues,
 } from "../../types/calculation";
 import { useCalculation } from "../../model/useCalculation";
-import styles from "./CalculatorForm.scss";
-import { RussiaMap } from "../../../../shared/ui/RussiaMap/RussiaMap";
-import { Modal } from "../../../../shared/ui/Modal/Modal";
+import styles from "./styles.scss";
+import { RussiaMap } from "../../../../shared/ui/RussiaMap";
+import { Modal } from "../../../../shared/ui/Modal";
 import {
   autoValidationSchema,
   manualValidationSchema,
