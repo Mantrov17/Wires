@@ -6,7 +6,7 @@ import {
   AutoCalculationFormValues,
   CalculationResult,
   ManualCalculationFormValues,
-} from "../../types/calculation";
+} from "../../model/calculation";
 import { useCalculation } from "../../model/useCalculation";
 import styles from "./styles.scss";
 import { RussiaMap } from "../../../../shared/ui/RussiaMap";
@@ -14,7 +14,7 @@ import { Modal } from "../../../../shared/ui/Modal";
 import {
   autoValidationSchema,
   manualValidationSchema,
-} from "../../model/validationSchema";
+} from "../../lib/validationSchema";
 
 interface CalculatorFormProps {
   onSuccess?: (result: CalculationResult) => void;

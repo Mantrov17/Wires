@@ -5,7 +5,7 @@ import {
   AutoCalculationFormValues,
   CalculationResult,
   ManualCalculationFormValues,
-} from "../../features/calculation/types/calculation";
+} from "../../features/calculation/model/calculation";
 
 export const calculationApi = {
   fetchSubjects: async () => {

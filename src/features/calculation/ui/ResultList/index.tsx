@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { CalculationResult } from "../../types/calculation";
+import { CalculationResult } from "../../model/calculation";
 import styles from "./styles.scss";
 import { useResult } from "../../model/useResult";
 

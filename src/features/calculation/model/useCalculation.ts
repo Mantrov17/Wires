@@ -1,10 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { calculationApi } from "../../../shared/api/calculationApi";
-import {
-  AutoCalculationFormValues,
-  ManualCalculationFormValues,
-  CalculationResult,
-} from "../types/calculation";
+import { CalculationResult } from "./calculation";
 
 export const useCalculation = () => {
   const queryClient = useQueryClient();

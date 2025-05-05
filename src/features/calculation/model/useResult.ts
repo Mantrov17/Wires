@@ -1,4 +1,4 @@
-import { CalculationResult } from "../types/calculation";
+import { CalculationResult } from "./calculation";
 import { useQuery } from "@tanstack/react-query";
 
 export const useResult = () => {
