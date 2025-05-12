@@ -9,6 +9,10 @@ export const ResultList = () => {
   const latestResult = calculations?.[0];
   const historyResults = calculations?.length > 1 ? calculations.slice(1) : [];
 
+  const formatDescription = (text: string) => ({
+    __html: text.replace(/\^(\d+)/g, "<sup>$1</sup>"),
+  });
+
   return (
     <div className={styles.historyListContainer}>
       {calculations?.length === 0 ? (
@@ -39,7 +43,12 @@ export const ResultList = () => {
                 </div>
                 <div>
                   <span className={styles.historyListMetaLabel}>Описание</span>
-                  {latestResult.descr}
+
+                  <span
+                    dangerouslySetInnerHTML={formatDescription(
+                      latestResult.descr,
+                    )}
+                  />
                 </div>
               </div>
             </div>
