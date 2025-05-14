@@ -82,7 +82,9 @@ export const ResultList = () => {
                       <span className={styles.historyListMetaLabel}>
                         Описание
                       </span>
-                      {latestResult.descr}
+                      <span
+                        dangerouslySetInnerHTML={formatDescription(calc.descr)} // Исправлено здесь
+                      />
                     </div>
                   </li>
                 ))}
